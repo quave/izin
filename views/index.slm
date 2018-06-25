@@ -1,0 +1,84 @@
+doctype html
+html
+  head
+    title VS Izin
+    meta name="keywords" content="izin"
+    meta name="author" content=this.author
+
+    css:
+      body {
+        background: #262628;
+        color: #AAA39D;
+        font-family: Optima, 'Helvetica Neue', Arial, sans-serif;
+      }
+      a, a:active, a:hover, a:focus, a:visited {
+        color: #5D7380;
+        text-decoration: none;
+      }
+      .list {
+        list-style: none;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .list .item {
+        text-align: center;
+        margin: 0 30px 30px 0;
+      }
+      .list .item .date {
+        margin: .3em 0;
+      }
+      .symbol {
+        font-size: 160px;
+        line-height: 120px;
+      }
+
+      .questions {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 1em;
+      }
+      .questions .group {
+        margin-top: 1em;
+      }
+      .questions .question {
+        display: flex;
+        width: 300px;
+        margin: .2em 0;
+      }
+      .questions .question label {
+        width: 50%;
+      }
+
+
+  body
+    - if this.error
+      p= this.error
+
+    form[action='/' method='post' enctype='application/json']
+      ul.questions
+        - for q of this.questions
+          li.group= q.group
+          - for qq of q.questions
+            - ix = "[" + this.questions.indexOf(q) + '][' + q.questions.indexOf(qq) + "]"
+            - g = 'questions' + ix
+            li.question
+              label.three
+                input[type='radio' name=g value=3]
+                span= qq["3"]
+              label.two
+                input[type='radio' name=g value=2]
+                span= qq["2"]
+      input[type='submit' value='Add']
+
+    ul.list
+      - for item of this.data
+        li.item
+          h3.date = item.date
+          div.symbol = item.symbol
+          span.number> = item.number
+          span.strong> = item.strong
+          a> href=('http://bronislav.ru/translate/' + (item.number + 209)) a
+          a href=('http://64hex.ru/nagaitseva/' + item.number + '.htm') b
