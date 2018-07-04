@@ -7,7 +7,9 @@ import render from './render'
 import questions from './questions'
 const app = express()
 
-app.set('view engine', 'slm');
+const dataFile = 'data.json'
+
+app.set('view engine', 'slm')
 app.set('views', path.join(__dirname, 'views'))
 
 app.use(express.json());       // to support JSON-encoded bodies
@@ -20,7 +22,7 @@ app.use((err, request, response, next) => {
 })
 
 const displayPage = (res, result) => {
-  const data = JSON.parse(fs.readFileSync("data.json"))
+  const data = JSON.parse(fs.readFileSync(dataFile))
   res.render('index', merge(result || {}, {
     data: reverse(data.map(render)),
     questions
@@ -37,7 +39,7 @@ app.post('/', (req, res) => {
   let result = {}
 
   if (!valid(req.body.questions)) {
-    displayPage(res, { error: "Invalid data" })
+    displayPage(res, { error: 'Invalid data' })
     return
   }
 
@@ -52,7 +54,7 @@ app.post('/', (req, res) => {
 
   console.debug("new item", newItem)
 
-  fs.readFile('./data.json', 'utf8', (err, json) => {
+  fs.readFile(dataFile, 'utf8', (err, json) => {
     if (err){
       console.log(err)
       return
@@ -62,10 +64,16 @@ app.post('/', (req, res) => {
     data.push(newItem) //add some data
     console.debug(JSON.stringify(data, null, 2))
 
-    fs.writeFile('data.json', JSON.stringify(data, null, 2), 'utf8', () => {})
-    console.log("written ok")
-    displayPage(res, {})
+    const outJson = JSON.stringify(data, null, 2)
+    if (outJson.length) {
+      fs.writeFile(dataFile, outJson, 'utf8', () => {})
+      console.log("written ok")
+    } else {
+      console.log('failed to stringify')
+    }
   })
+
+  displayPage(res, {})
 })
 
 app.listen(3000)
