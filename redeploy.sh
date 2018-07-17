@@ -1,3 +1,4 @@
+cd /home/ec2-user/src/izin
 git pull
 docker build -t vladsynkov/izin .
 docker rm -f izin
