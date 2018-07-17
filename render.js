@@ -1,6 +1,5 @@
 import {map, pipe, filter, prop, addIndex, compose,
   indexOf, sum, range} from 'ramda';
-import data from './data';
 
 const hexagramIndexes = [
   [1, 43, 14, 34, 9, 5, 26, 11],

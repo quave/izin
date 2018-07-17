@@ -1,4 +1,3 @@
-import data from './data.json'
 import { range, map, pipe, groupBy, omit, prop, toPairs, values, fromPairs } from 'ramda'
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('data.sqlite3')
