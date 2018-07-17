@@ -1,10 +1,10 @@
 import express from 'express'
 import path from 'path'
-import fs from 'fs'
 import m from 'moment'
 import { reverse, all, propEq, merge, addIndex, reduce, assoc, map } from 'ramda'
 import render from './render'
 import questions from './questions'
+import { getData, close, addItem } from './db'
 const app = express()
 
 const dataFile = 'data.json'
@@ -16,18 +16,19 @@ app.use(express.json());       // to support JSON-encoded bodies
 app.use(express.urlencoded({ extended: true })); // to support URL-encoded bodies
 
 app.use((err, request, response, next) => {
-  // log the error, for now just console.log
   console.log(err)
   response.status(500).send('Something broke!')
 })
 
-const displayPage = (res, result) => {
-  const data = JSON.parse(fs.readFileSync(dataFile))
-  res.render('index', merge(result || {}, {
-    data: reverse(data.map(render)),
-    questions
-  }))
-}
+const displayPage = (res, result) =>
+  getData().then((data) => {
+    console.log(data)
+
+    res.render('index', merge(result || {}, {
+      data: reverse(data.map(render)),
+      questions
+    }))
+  })
 
 app.get('/', (req, res) => displayPage(res))
 
@@ -54,27 +55,11 @@ app.post('/', (req, res) => {
 
   console.debug("new item", newItem)
 
-  fs.readFile(dataFile, 'utf8', (err, json) => {
-    if (err){
-      console.log(err)
-      return
-    }
-
-    const data = JSON.parse(json) //now it an object
-    data.push(newItem) //add some data
-    console.debug(JSON.stringify(data, null, 2))
-
-    const outJson = JSON.stringify(data, null, 2)
-    if (outJson.length) {
-      fs.writeFile(dataFile, outJson, 'utf8', () => {})
-      console.log("written ok")
-    } else {
-      console.log('failed to stringify')
-    }
+  addItem(newItem).then(() => {
+    displayPage(res, {})
   })
-
-  displayPage(res, {})
 })
 
 app.listen(3000)
 
+process.on('exit', close)
