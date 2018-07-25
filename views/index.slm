@@ -79,6 +79,8 @@ html
           h3.date = item.date
           div.symbol = item.symbol
           span.number> = item.number
+          span.arrow → 
+          span.number> = item.newNumber
           span.strong> = item.strong
           a> href=('http://bronislav.ru/translate/' + (item.number + 209)) a
           a href=('http://64hex.ru/nagaitseva/' + item.number + '.htm') b
