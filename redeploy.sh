@@ -1,4 +1,5 @@
 cd /home/ec2-user/src/izin
+cp data.sqlite3 data.`date "+%Y%m%d-%H%M"`.sqlite3
 git pull
 docker build -t vladsynkov/izin .
 docker rm -f izin
