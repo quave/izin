@@ -1,13 +1,13 @@
-import express from 'express'
-import path from 'path'
-import m from 'moment'
-import { reverse, all, propEq, merge, addIndex, reduce, assoc, map } from 'ramda'
-import render from './render'
-import questions from './questions'
-import { getData, close, addItem } from './db'
-const app = express()
+const express = require('express');
+const path = require('path');
+const m = require('moment');
+const { reverse, all, propEq, merge, addIndex, reduce, assoc, map } = require('ramda');
+const render = require('./render');
+const questions = require('./questions');
+const { getData, close, addItem } = require('./db');
+const app = express();
 
-const dataFile = 'data.json'
+const dataFile = 'data.json';
 
 app.set('view engine', 'slm')
 app.set('views', path.join(__dirname, 'views'))
@@ -24,10 +24,10 @@ const displayPage = (res, result) =>
   getData().then((data) => {
     console.log(data)
 
-    res.render('index', merge(result || {}, {
+    res.render('index', {...(result || {}), 
       data: reverse(data.map(render)),
       questions
-    }))
+    })
   })
 
 app.get('/', (req, res) => displayPage(res))

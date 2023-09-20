@@ -1,4 +1,4 @@
-import { range, map, pipe, groupBy, omit, prop, toPairs, values, fromPairs } from 'ramda'
+const { range, map, pipe, groupBy, omit, prop, toPairs, values, fromPairs } = require('ramda');
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('data.sqlite3')
 
@@ -85,8 +85,8 @@ const addItem = d => {
       console.log('Got promises', promises.length)
       return Promise.all(promises)
     })
-}
+};
 
-const close = () => db.close()
+const close = () => db.close();
 
-export { addItem, getData, close }
+module.exports = { addItem, getData, close };

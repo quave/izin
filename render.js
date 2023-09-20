@@ -1,5 +1,5 @@
-import {map, pipe, filter, prop, addIndex, compose,
-  indexOf, sum, range} from 'ramda'
+const {map, pipe, filter, prop, addIndex, compose,
+  indexOf, sum, range} = require('ramda');
 
 const hexagramIndexes = [
   [1, 43, 14, 34, 9, 5, 26, 11],
@@ -80,5 +80,5 @@ const render = data => {
   }
 }
 
-export default render
+module.exports = render;
 
