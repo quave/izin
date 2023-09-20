@@ -17,7 +17,6 @@ const runPromise = (sql, args) => new Promise((resolve, reject) => {
 })
 
 const select = sql => new Promise((resolve, reject) => {
-  console.log('Querying', sql)
 
   db.all(sql, (err, rows) => {
     if (err) {
@@ -30,8 +29,6 @@ const select = sql => new Promise((resolve, reject) => {
 })
 
 const getData = () => {
-  console.log('Getting data')
-
   const sql = `
     select s.timestamp, l.level, l.value from statements as s
     join levels as l on l.data_id = s.id
@@ -57,24 +54,18 @@ const getData = () => {
   )
 
   return select(sql).then((raw) => {
-    console.log('Raw data', raw)
-
     return transform(raw)
   })
 }
 
 const addItem = d => {
-  console.log('Before addItem', d)
 
   return runPromise("INSERT INTO statements (timestamp) VALUES (datetime(?))", [d.date])
     .then(dataId => {
-      console.log('Added item, id', dataId)
 
       const promises = range(1, 7).flatMap(l => {
-        console.log('Before add level', l)
 
         return d['l' + l].map(v => {
-          console.log('Before add l v', v)
 
           return runPromise(
             "INSERT INTO levels (data_id, level, value) VALUES (?, ?, ?)",
@@ -82,7 +73,6 @@ const addItem = d => {
         })
       })
 
-      console.log('Got promises', promises.length)
       return Promise.all(promises)
     })
 };

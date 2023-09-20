@@ -22,21 +22,17 @@ app.use((err, request, response, next) => {
 
 const displayPage = (res, result) =>
   getData().then((data) => {
-    console.log(data)
-
     res.render('index', {...(result || {}), 
       data: reverse(data.map(render)),
       questions
     })
   })
 
-app.get('/', (req, res) => displayPage(res))
+app.get('/izin', (req, res) => displayPage(res))
 
 const valid = qs => qs && qs.length == 6 && all(propEq('length', 3), qs)
 
-app.post('/', (req, res) => {
-  console.debug(req.body)
-
+app.post('/izin', (req, res) => {
   let result = {}
 
   if (!valid(req.body.questions)) {
@@ -52,8 +48,6 @@ app.post('/', (req, res) => {
     req.body.questions
   )
   newItem.date = m().format('YYYY-MM-DD HH:mm')
-
-  console.debug("new item", newItem)
 
   addItem(newItem).then(() => {
     displayPage(res, {})
