@@ -27,7 +27,7 @@ const displayPage = (res, result) =>
       questions
     })
   })
-
+app.get('/', (req, res) => res.send("ok"))
 app.get('/izin', (req, res) => displayPage(res))
 
 const valid = qs => qs && qs.length == 6 && all(propEq('length', 3), qs)
